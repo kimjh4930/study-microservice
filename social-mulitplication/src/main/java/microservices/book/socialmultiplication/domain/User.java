@@ -22,15 +22,12 @@ public final class User {
         alias = null;
     }
 
-    public String getAlias() {
-        return alias;
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-            "alias='" + alias + '\'' +
-            '}';
+    public String getAlias() {
+        return alias;
     }
 
     @Override
@@ -38,11 +35,12 @@ public final class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(alias, user.alias);
+        return Objects.equals(id, user.id) &&
+            Objects.equals(alias, user.alias);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(alias);
+        return Objects.hash(id, alias);
     }
 }
