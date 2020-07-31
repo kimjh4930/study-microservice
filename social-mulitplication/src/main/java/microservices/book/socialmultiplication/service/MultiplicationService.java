@@ -13,4 +13,6 @@ public interface MultiplicationService {
 
     List<MultiplicationResultAttempt> getStatsForUser (String userAlias);
 
+    MultiplicationResultAttempt getResultById(Long resultId);
+
 }
