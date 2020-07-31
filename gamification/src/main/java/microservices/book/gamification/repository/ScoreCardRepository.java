@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ScordCardRepository extends CrudRepository<ScoreCard, Long> {
+public interface ScoreCardRepository extends CrudRepository<ScoreCard, Long> {
 
     @Query(value = "SELECT SUM(s.score) " +
         "FROM microservices.book.gamification.domain.ScoreCard s " +

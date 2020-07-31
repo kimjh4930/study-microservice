@@ -21,6 +21,10 @@ public final class BadgeCard {
         this.badge = badge;
     }
 
+    public BadgeCard(final Long userId, final Badge badge){
+        this(null, userId, System.currentTimeMillis(), badge);
+    }
+
     protected BadgeCard (){
         this(null, null, 0L, null);
     }

@@ -42,4 +42,24 @@ public final class ScoreCard {
     public ScoreCard(final Long userId, final Long attemptId){
         this(null, userId, attemptId, System.currentTimeMillis(), DEFAULT_SCORE);
     }
+
+    public Long getCardId() {
+        return cardId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getAttemptId() {
+        return attemptId;
+    }
+
+    public long getScoreTimestamp() {
+        return scoreTimestamp;
+    }
+
+    public int getScore() {
+        return score;
+    }
 }
