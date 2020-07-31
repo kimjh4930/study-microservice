@@ -1,6 +1,7 @@
 package microservices.book.gamification.client.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import microservices.book.gamification.client.MultiplicationResultAttemptDeserializer;
 
 import java.util.Objects;
 

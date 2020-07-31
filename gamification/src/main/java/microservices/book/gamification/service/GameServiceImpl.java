@@ -1,6 +1,8 @@
 package microservices.book.gamification.service;
 
 import lombok.extern.slf4j.Slf4j;
+import microservices.book.gamification.client.MultiplicationResultAttemptClient;
+import microservices.book.gamification.client.dto.MultiplicationResultAttempt;
 import microservices.book.gamification.domain.Badge;
 import microservices.book.gamification.domain.BadgeCard;
 import microservices.book.gamification.domain.GameStats;
@@ -19,16 +21,22 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GameServiceImpl implements GameService {
 
+    public static final int LUCKY_NUMBER = 42;
+
     private final ScoreCardRepository scoreCardRepository;
     private final BadgeCardRepository badgeCardRepository;
+    private final MultiplicationResultAttemptClient attemptClient;
 
     @Autowired
-    public GameServiceImpl(ScoreCardRepository scoreCardRepository, BadgeCardRepository badgeCardRepository) {
+    public GameServiceImpl(ScoreCardRepository scoreCardRepository,
+                           BadgeCardRepository badgeCardRepository,
+                           MultiplicationResultAttemptClient attemptClient) {
         this.scoreCardRepository = scoreCardRepository;
         this.badgeCardRepository = badgeCardRepository;
+        this.attemptClient = attemptClient;
     }
-    @Override
 
+    @Override
     public GameStats newAttemptForUser(Long userId, Long attemptId, boolean correct) {
         // 처음 답이 맞았을 때만 점수를 줌
         if(correct) {
@@ -56,6 +64,21 @@ public class GameServiceImpl implements GameService {
         List<ScoreCard> scordCardList = scoreCardRepository.findByUserIdOrOrderByScoreTimestampDesc(userId);
         List<BadgeCard> badgeCardList = badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId);
 
+        //점수 기반 배지
+
+        // 첫 번째 정답 배지
+
+        // 행운의 숫자 배지
+        MultiplicationResultAttempt attempt =
+            attemptClient.retrieveMultiplicationResultAttemptById(attemptId);
+
+        if(!containsBadge(badgeCardList, Badge.LUCKY_NUMBER) &&
+            (LUCKY_NUMBER == attempt.getMultiplicationFactorA() ||
+                LUCKY_NUMBER == attempt.getMultiplicationFactorB())){
+            BadgeCard luckyNumberBadge = giveBadgeToUser(Badge.LUCKY_NUMBER, userId);
+            badgeCards.add(luckyNumberBadge);
+        }
+
         return badgeCards;
     }
 
@@ -71,7 +94,6 @@ public class GameServiceImpl implements GameService {
         }
 
         return Optional.empty();
-
     }
 
     private boolean containsBadge (final List<BadgeCard> badgeCards, final Badge badge){
